@@ -1,0 +1,64 @@
+{
+	"name": "Notebook 1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparktool1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1"
+			},
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/81c0eba5-b65a-4f50-8c57-6e7e82e459c0/resourceGroups/RG_Databrick_Test/providers/Microsoft.Synapse/workspaces/testsynapsepoc/bigDataPools/sparktool1",
+				"name": "sparktool1",
+				"type": "Spark",
+				"endpoint": "https://testsynapsepoc.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparktool1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"extraHeader": null
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"columns = [\"language\",\"users_count\"]\r\n",
+					"data = [(\"Java\", \"20000\"), (\"Python\", \"100000\"), (\"Scala\", \"3000\")]\r\n",
+					"\r\n",
+					"dfFromRDD2 = spark.createDataFrame(rdd).toDF(*columns)"
+				],
+				"attachments": null,
+				"execution_count": 5
+			}
+		]
+	}
+}
