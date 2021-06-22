@@ -5,9 +5,6 @@
 		"workspaceName": {
 			"value": "testsynapsepoc"
 		},
-		"CosmosDb1_connectionString": {
-			"value": ""
-		},
 		"testsynapsepoc-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
