@@ -2,7 +2,7 @@
 	"name": "SQL script 1",
 	"properties": {
 		"content": {
-			"query": "Create Table Personen (name varchar(20), prename varchar(20), age int);",
+			"query": "select * from dbo.Personen",
 			"metadata": {
 				"language": "sql"
 			},
