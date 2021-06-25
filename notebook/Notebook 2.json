@@ -65,7 +65,7 @@
 					"  \"fs.azure.account.key.datalalakesynapse1.blob.core.windows.net\",\r\n",
 					"  \"dVCpKzceqhS6yukyP4fzeVwU1W2xjelaSZZH6/tekoeemWaGuE7ZCifJEyjrF39N8tg3JZwaFGYgz2/hDbwtyw==\")"
 				],
-				"execution_count": 7
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
@@ -86,7 +86,7 @@
 					"  \"fs.azure.account.key.datalalakesynapse1.blob.core.windows.net\",\r\n",
 					"  \"dVCpKzceqhS6yukyP4fzeVwU1W2xjelaSZZH6/tekoeemWaGuE7ZCifJEyjrF39N8tg3JZwaFGYgz2/hDbwtyw==\")"
 				],
-				"execution_count": 8
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
@@ -108,7 +108,7 @@
 					"# Displays the content of the DataFrame to stdout\r\n",
 					"df.show()"
 				],
-				"execution_count": 9
+				"execution_count": 10
 			},
 			{
 				"cell_type": "code",
@@ -127,7 +127,7 @@
 				"source": [
 					"df.createOrReplaceTempView(\"pysparkdftemptable\")"
 				],
-				"execution_count": 10
+				"execution_count": 11
 			},
 			{
 				"cell_type": "code",
@@ -148,11 +148,48 @@
 				},
 				"source": [
 					"%%spark\r\n",
-					"val df = spark.read.\r\n",
-					"option(Constants.SERVER, \"samplews.database.windows.net\").\r\n",
-					"synapsesql(\"SQLPoolTest.dbo.Personen\")"
+					"val scala_df = spark.sqlContext.sql (\"select * from pysparkdftemptable\")\r\n",
+					"\r\n",
+					"scala_df.write.synapsesql(\"sqlpool.dbo.PySparkTable\", Constants.INTERNAL)"
 				],
-				"execution_count": null
+				"execution_count": 12
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "scala"
+					},
+					"collapsed": true
+				},
+				"source": [
+					"%%spark\r\n",
+					"import com.microsoft.azure.sqldb.spark.config.Config\r\n",
+					"import com.microsoft.azure.sqldb.spark.connect._\r\n",
+					"\r\n",
+					"val config = Config(Map(\r\n",
+					"  \"url\"            -> \"testsynapsepoc.database.windows.net\",\r\n",
+					"  \"databaseName\"   -> \"SQLPoolTest\",\r\n",
+					"  \"dbTable\"        -> \"dbo.Personen\",\r\n",
+					"  \"user\"           -> \"pft6fe\",\r\n",
+					"  \"password\"       -> \"S2z8r111000_4\",\r\n",
+					"  \"connectTimeout\" -> \"5\", //seconds\r\n",
+					"  \"queryTimeout\"   -> \"5\"  //seconds\r\n",
+					"))\r\n",
+					"\r\n",
+					"val collection = sqlContext.read.sqlDB(config)\r\n",
+					"collection.show()"
+				],
+				"execution_count": 13
 			}
 		]
 	}
