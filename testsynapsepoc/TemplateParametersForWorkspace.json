@@ -5,8 +5,17 @@
 		"workspaceName": {
 			"value": "testsynapsepoc"
 		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"linkedService1_accountKey": {
+			"value": ""
+		},
 		"testsynapsepoc-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
+		},
+		"linkedService1_properties_typeProperties_url": {
+			"value": "https://datalalakesynapse1.dfs.core.windows.net"
 		},
 		"testsynapsepoc-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://datalalakesynapse1.dfs.core.windows.net"

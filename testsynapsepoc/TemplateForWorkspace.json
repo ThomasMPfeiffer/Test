@@ -7,9 +7,21 @@
 			"metadata": "Arbeitsbereichsname",
 			"defaultValue": "testsynapsepoc"
 		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Sichere Zeichenfolge für \"connectionString\" von \"AzureSqlDatabase1\""
+		},
+		"linkedService1_accountKey": {
+			"type": "secureString",
+			"metadata": "Sichere Zeichenfolge für \"accountKey\" von \"linkedService1\""
+		},
 		"testsynapsepoc-WorkspaceDefaultSqlServer_connectionString": {
 			"type": "secureString",
 			"metadata": "Sichere Zeichenfolge für \"connectionString\" von \"testsynapsepoc-WorkspaceDefaultSqlServer\""
+		},
+		"linkedService1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datalalakesynapse1.dfs.core.windows.net"
 		},
 		"testsynapsepoc-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
@@ -20,6 +32,184 @@
 		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/Pipeline 1')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy Database1 auf SQLPoolTest",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "SqlPoolSink",
+								"allowPolyBase": true,
+								"polyBaseSettings": {
+									"rejectValue": 0,
+									"rejectType": "value",
+									"useTypeDefault": true
+								},
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "linkedService1",
+									"type": "LinkedServiceReference"
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SqlPoolTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/AzureSqlTable1')]",
+				"[concat(variables('workspaceId'), '/datasets/SqlPoolTable1')]",
+				"[concat(variables('workspaceId'), '/linkedServices/linkedService1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlTable1')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "name",
+						"type": "varchar"
+					},
+					{
+						"name": "prename",
+						"type": "varchar"
+					},
+					{
+						"name": "age",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Personen"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SqlPoolTable1')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [
+					{
+						"name": "ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Vorname",
+						"type": "varchar"
+					},
+					{
+						"name": "Nachname",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Personen"
+				},
+				"sqlPool": {
+					"referenceName": "SQLPoolTest",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/SQLPoolTest')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/linkedService1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('linkedService1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('linkedService1_accountKey')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/testsynapsepoc-WorkspaceDefaultSqlServer')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
@@ -93,7 +283,441 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "select * from dbo.Personen",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "SQLPoolTest",
+						"databaseName": "SQLPoolTest"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sparkpool1",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/81c0eba5-b65a-4f50-8c57-6e7e82e459c0/resourceGroups/RG_Databrick_Test/providers/Microsoft.Synapse/workspaces/testsynapsepoc/bigDataPools/sparkpool1",
+						"name": "sparkpool1",
+						"type": "Spark",
+						"endpoint": "https://testsynapsepoc.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool1",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56
+					}
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"# Defining the service principal credentials for the Azure storage account\r\n",
+							"spark.conf.set(\"fs.azure.account.auth.type\", \"OAuth\")\r\n",
+							"spark.conf.set(\"fs.azure.account.oauth.provider.type\",  \"org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider\")\r\n",
+							"spark.conf.set(\"fs.azure.account.oauth2.client.id\", \"<application-id>\")\r\n",
+							"spark.conf.set(\"fs.azure.account.oauth2.client.secret\", \"<service-credential>\")\r\n",
+							"spark.conf.set(\"fs.azure.account.oauth2.client.endpoint\", \"https://login.microsoftonline.com/<directory-id>/oauth2/token\")\r\n",
+							"\r\n",
+							"# Defining a separate set of service principal credentials for Azure Synapse Analytics (If not defined, the connector will use the Azure storage account credentials)\r\n",
+							"spark.conf.set(\"spark.databricks.sqldw.jdbc.service.principal.client.id\", \"<application-id>\")\r\n",
+							"spark.conf.set(\"spark.databricks.sqldw.jdbc.service.principal.client.secret\", \"<service-credential>\")"
+						],
+						"outputs": [],
+						"execution_count": 22
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"spark.conf.set(\r\n",
+							"  \"fs.azure.account.key.<your-storage-account-name>.blob.core.windows.net\",\r\n",
+							"  \"dVCpKzceqhS6yukyP4fzeVwU1W2xjelaSZZH6/tekoeemWaGuE7ZCifJEyjrF39N8tg3JZwaFGYgz2/hDbwtyw==\")"
+						],
+						"outputs": [],
+						"execution_count": 23
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"sc._jsc.hadoopConfiguration().set(\r\n",
+							"  \"fs.azure.account.key.datalalakesynapse1.blob.core.windows.net\",\r\n",
+							"  \"dVCpKzceqhS6yukyP4fzeVwU1W2xjelaSZZH6/tekoeemWaGuE7ZCifJEyjrF39N8tg3JZwaFGYgz2/hDbwtyw==\")"
+						],
+						"outputs": [],
+						"execution_count": 24
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"df = spark.read.option(\"header\",\"true\").option(\"inferSchema\",\"true\").option(\"delimiter\",\",\").csv(f\"wasbs://synapsecontainter1@datalalakesynapse1.blob.core.windows.net/Personen.CSV\")"
+						],
+						"outputs": [],
+						"execution_count": 25
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"df.show()"
+						],
+						"outputs": [],
+						"execution_count": 35
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"df.createOrReplaceTempView(\"personendftemptable\")"
+						],
+						"outputs": [],
+						"execution_count": 27
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "scala"
+							},
+							"collapsed": true
+						},
+						"source": [
+							"%%spark\r\n",
+							"val scala_df = spark.sqlContext.sql (\"select * from pysparkdftemptable\")\r\n",
+							"\r\n",
+							"scala_df.write.synapsesql(\"SQLPoolTest.dbo.PySparkTable\", Constants.INTERNAL)"
+						],
+						"outputs": [],
+						"execution_count": 49
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 2')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sparkpool1",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/81c0eba5-b65a-4f50-8c57-6e7e82e459c0/resourceGroups/RG_Databrick_Test/providers/Microsoft.Synapse/workspaces/testsynapsepoc/bigDataPools/sparkpool1",
+						"name": "sparkpool1",
+						"type": "Spark",
+						"endpoint": "https://testsynapsepoc.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool1",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56
+					}
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"spark.conf.set(\r\n",
+							"  \"fs.azure.account.key.datalalakesynapse1.blob.core.windows.net\",\r\n",
+							"  \"dVCpKzceqhS6yukyP4fzeVwU1W2xjelaSZZH6/tekoeemWaGuE7ZCifJEyjrF39N8tg3JZwaFGYgz2/hDbwtyw==\")"
+						],
+						"outputs": [],
+						"execution_count": 8
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"spark.conf.set(\r\n",
+							"  \"fs.azure.account.key.datalalakesynapse1.blob.core.windows.net\",\r\n",
+							"  \"dVCpKzceqhS6yukyP4fzeVwU1W2xjelaSZZH6/tekoeemWaGuE7ZCifJEyjrF39N8tg3JZwaFGYgz2/hDbwtyw==\")"
+						],
+						"outputs": [],
+						"execution_count": 9
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"# spark is an existing SparkSession\r\n",
+							"df = spark.read.option(\"header\",\"true\").option(\"inferSchema\",\"true\").option(\"delimiter\",\",\").csv(f\"wasbs://synapsecontainter1@datalalakesynapse1.blob.core.windows.net/Personen.CSV\")\r\n",
+							"# Displays the content of the DataFrame to stdout\r\n",
+							"df.show()"
+						],
+						"outputs": [],
+						"execution_count": 10
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"df.createOrReplaceTempView(\"pysparkdftemptable\")"
+						],
+						"outputs": [],
+						"execution_count": 11
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "scala"
+							},
+							"collapsed": true
+						},
+						"source": [
+							"%%spark\r\n",
+							"val scala_df = spark.sqlContext.sql (\"select * from pysparkdftemptable\")\r\n",
+							"\r\n",
+							"scala_df.write.synapsesql(\"sqlpool.dbo.PySparkTable\", Constants.INTERNAL)"
+						],
+						"outputs": [],
+						"execution_count": 12
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "scala"
+							},
+							"collapsed": true
+						},
+						"source": [
+							"%%spark\r\n",
+							"import com.microsoft.azure.sqldb.spark.config.Config\r\n",
+							"import com.microsoft.azure.sqldb.spark.connect._\r\n",
+							"\r\n",
+							"val config = Config(Map(\r\n",
+							"  \"url\"            -> \"testsynapsepoc.database.windows.net\",\r\n",
+							"  \"databaseName\"   -> \"SQLPoolTest\",\r\n",
+							"  \"dbTable\"        -> \"dbo.Personen\",\r\n",
+							"  \"user\"           -> \"pft6fe\",\r\n",
+							"  \"password\"       -> \"S2z8r111000_4\",\r\n",
+							"  \"connectTimeout\" -> \"5\", //seconds\r\n",
+							"  \"queryTimeout\"   -> \"5\"  //seconds\r\n",
+							"))\r\n",
+							"\r\n",
+							"val collection = sqlContext.read.sqlDB(config)\r\n",
+							"collection.show()"
+						],
+						"outputs": [],
+						"execution_count": 13
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 3')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -145,72 +769,17 @@
 					{
 						"cell_type": "code",
 						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": true
+							"microsoft": {
+								"language": "python"
+							}
 						},
 						"source": [
-							"# Defining the service principal credentials for the Azure storage account\r\n",
-							"spark.conf.set(\"fs.azure.account.auth.type\", \"OAuth\")\r\n",
-							"spark.conf.set(\"fs.azure.account.oauth.provider.type\",  \"org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider\")\r\n",
-							"spark.conf.set(\"fs.azure.account.oauth2.client.id\", \"<application-id>\")\r\n",
-							"spark.conf.set(\"fs.azure.account.oauth2.client.secret\", \"<service-credential>\")\r\n",
-							"spark.conf.set(\"fs.azure.account.oauth2.client.endpoint\", \"https://login.microsoftonline.com/<directory-id>/oauth2/token\")\r\n",
-							"\r\n",
-							"# Defining a separate set of service principal credentials for Azure Synapse Analytics (If not defined, the connector will use the Azure storage account credentials)\r\n",
-							"spark.conf.set(\"spark.databricks.sqldw.jdbc.service.principal.client.id\", \"<application-id>\")\r\n",
-							"spark.conf.set(\"spark.databricks.sqldw.jdbc.service.principal.client.secret\", \"<service-credential>\")"
-						],
-						"outputs": [],
-						"execution_count": 1
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": true
-						},
-						"source": [
-							"spark.conf.set(\r\n",
-							"  \"fs.azure.account.key.<your-storage-account-name>.blob.core.windows.net\",\r\n",
-							"  \"dVCpKzceqhS6yukyP4fzeVwU1W2xjelaSZZH6/tekoeemWaGuE7ZCifJEyjrF39N8tg3JZwaFGYgz2/hDbwtyw==\")"
-						],
-						"outputs": [],
-						"execution_count": 2
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": true
-						},
-						"source": [
-							"sc._jsc.hadoopConfiguration().set(\r\n",
-							"  \"fs.azure.account.key.datalalakesynapse1.blob.core.windows.net\",\r\n",
-							"  \"dVCpKzceqhS6yukyP4fzeVwU1W2xjelaSZZH6/tekoeemWaGuE7ZCifJEyjrF39N8tg3JZwaFGYgz2/hDbwtyw==\")"
+							"%%pyspark\r\n",
+							"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/Personen.CSV', format='csv'\r\n",
+							"## If header exists uncomment line below\r\n",
+							"##, header=True\r\n",
+							")\r\n",
+							"display(df.limit(10))"
 						],
 						"outputs": [],
 						"execution_count": 3
@@ -230,7 +799,7 @@
 							"collapsed": true
 						},
 						"source": [
-							"df = spark.read.option(\"header\",\"true\").option(\"inferSchema\",\"true\").option(\"delimiter\",\",\").csv(f\"wasbs://synapsecontainter1@datalalakesynapse1.blob.core.windows.net/Personen.CSV\")"
+							"df.show()"
 						],
 						"outputs": [],
 						"execution_count": 4
@@ -250,10 +819,36 @@
 							"collapsed": true
 						},
 						"source": [
-							"df.show()"
+							"df.createOrReplaceTempView(\"personendftemptable\")"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "scala"
+							},
+							"collapsed": true
+						},
+						"source": [
+							"%%spark\r\n",
+							"val scala_df = spark.sqlContext.sql (\"select * from personendftemptable\")\r\n",
+							"\r\n",
+							"scala_df.write.synapsesql(\"SQLPoolTest.dbo.PySparkTable\", Constants.INTERNAL)"
+						],
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
