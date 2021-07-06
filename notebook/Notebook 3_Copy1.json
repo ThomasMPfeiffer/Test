@@ -1,5 +1,5 @@
 {
-	"name": "Notebook 3",
+	"name": "Notebook 3_Copy1",
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -56,11 +56,11 @@
 				},
 				"source": [
 					"%%pyspark\r\n",
-					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/Personen.CSV', format='csv'\r\n",
+					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.xlsx', format='csv'\r\n",
 					"## If header exists uncomment line below\r\n",
-					"##, header=True\r\n",
+					", header=True\r\n",
 					")\r\n",
-					"display(df.limit(10))"
+					"display()"
 				],
 				"execution_count": 1
 			},
@@ -98,7 +98,7 @@
 					"collapsed": true
 				},
 				"source": [
-					"df.createOrReplaceTempView(\"personendftemptable\")"
+					"df.createOrReplaceTempView(\"ultradurdftemptable\")"
 				],
 				"execution_count": 3
 			},
@@ -123,7 +123,7 @@
 					"%%spark\r\n",
 					"val scala_df = spark.sqlContext.sql (\"select * from personendftemptable\")\r\n",
 					"\r\n",
-					"scala_df.write.synapsesql(\"SQLPoolTest.dbo.PySparkTable\", Constants.INTERNAL)"
+					"scala_df.write.synapsesql(\"SQLPoolTest.dbo.UltradurTable\", Constants.INTERNAL)"
 				],
 				"execution_count": 4
 			}
