@@ -56,13 +56,13 @@
 				},
 				"source": [
 					"%%pyspark\r\n",
-					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.xlsx', format='csv'\r\n",
+					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.CSV', format='csv'\r\n",
 					"## If header exists uncomment line below\r\n",
-					", header=True\r\n",
+					"##, header=True\r\n",
 					")\r\n",
-					"display()"
+					"display(df)"
 				],
-				"execution_count": 1
+				"execution_count": 12
 			},
 			{
 				"cell_type": "code",
@@ -81,7 +81,7 @@
 				"source": [
 					"df.show()"
 				],
-				"execution_count": 2
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
@@ -100,7 +100,7 @@
 				"source": [
 					"df.createOrReplaceTempView(\"ultradurdftemptable\")"
 				],
-				"execution_count": 3
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
@@ -121,11 +121,11 @@
 				},
 				"source": [
 					"%%spark\r\n",
-					"val scala_df = spark.sqlContext.sql (\"select * from personendftemptable\")\r\n",
+					"val scala_df = spark.sqlContext.sql (\"select * from ultradurdftemptable\")\r\n",
 					"\r\n",
 					"scala_df.write.synapsesql(\"SQLPoolTest.dbo.UltradurTable\", Constants.INTERNAL)"
 				],
-				"execution_count": 4
+				"execution_count": 10
 			}
 		]
 	}
