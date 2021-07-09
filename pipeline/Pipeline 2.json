@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Notebook3_Copy",
+				"name": "Notebook4",
 				"type": "SynapseNotebook",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebook": {
-						"referenceName": "Notebook 3_Copy1",
+						"referenceName": "Notebook 4",
 						"type": "NotebookReference"
 					},
 					"snapshot": true
