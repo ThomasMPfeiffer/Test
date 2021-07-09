@@ -1,0 +1,25 @@
+{
+	"name": "Wiederholung",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Pipeline 2",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 30,
+				"startTime": "2021-07-09T10:25:00Z",
+				"endTime": "2021-07-12T10:25:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
