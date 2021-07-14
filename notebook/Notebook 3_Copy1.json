@@ -56,7 +56,7 @@
 				},
 				"source": [
 					"%%pyspark\r\n",
-					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.CSV', format='csv'\r\n",
+					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/*.CSV', format='csv'\r\n",
 					"## If header exists uncomment line below\r\n",
 					"##, header=True\r\n",
 					")\r\n",
