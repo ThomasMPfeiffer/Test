@@ -181,7 +181,7 @@
 					"  \"databaseName\"   -> \"SQLPoolTest\",\r\n",
 					"  \"dbTable\"        -> \"dbo.Personen\",\r\n",
 					"  \"user\"           -> \"pft6fe\",\r\n",
-					"  \"password\"       -> \"S2z8r111000_4\",\r\n",
+					"  \"password\"       -> \"\",\r\n",
 					"  \"connectTimeout\" -> \"5\", //seconds\r\n",
 					"  \"queryTimeout\"   -> \"5\"  //seconds\r\n",
 					"))\r\n",
