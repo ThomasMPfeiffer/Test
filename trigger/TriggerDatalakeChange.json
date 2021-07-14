@@ -17,8 +17,7 @@
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/81c0eba5-b65a-4f50-8c57-6e7e82e459c0/resourceGroups/RG_Databrick_Test/providers/Microsoft.Storage/storageAccounts/datalalakesynapse1",
 			"events": [
-				"Microsoft.Storage.BlobCreated",
-				"Microsoft.Storage.BlobDeleted"
+				"Microsoft.Storage.BlobCreated"
 			]
 		}
 	}
