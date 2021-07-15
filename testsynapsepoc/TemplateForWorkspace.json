@@ -1161,14 +1161,17 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56
-					}
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
-							"print(\"Pipeline 2 wurde ausgeführt\");"
+							"print(DataAdded);"
 						],
 						"outputs": [],
 						"execution_count": null
