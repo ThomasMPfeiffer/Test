@@ -23,6 +23,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"DataAdded": {
+				"type": "string",
+				"defaultValue": "@triggerBody().folderName"
+			}
+		},
 		"annotations": []
 	}
 }
