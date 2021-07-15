@@ -49,7 +49,7 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"print(\"Pipeline 2 wurde ausgeführt\");"
+					"print(DataAdded);"
 				],
 				"execution_count": null
 			}
