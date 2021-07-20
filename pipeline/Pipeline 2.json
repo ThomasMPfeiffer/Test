@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebook": {
-						"referenceName": "Notebook 4",
+						"referenceName": "Read_and_save_Data",
 						"type": "NotebookReference"
 					},
 					"parameters": {
