@@ -122,7 +122,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"notebook": {
-								"referenceName": "Read_and_save_Data",
+								"referenceName": "Notebook 4",
 								"type": "NotebookReference"
 							},
 							"parameters": {
@@ -147,7 +147,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/notebooks/Read_and_save_Data')]"
+				"[concat(variables('workspaceId'), '/notebooks/Notebook 4')]"
 			]
 		},
 		{
@@ -1119,7 +1119,7 @@
 							]
 						},
 						"source": [
-							"DatafromParam = DataAdded"
+							"DataAdded = \"Keine Daten vorhanden\""
 						],
 						"outputs": [],
 						"execution_count": null
