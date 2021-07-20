@@ -19,16 +19,16 @@
 						"referenceName": "Read_and_save_Data",
 						"type": "NotebookReference"
 					},
+					"parameters": {
+						"DataAdded": {
+							"value": "",
+							"type": "string"
+						}
+					},
 					"snapshot": true
 				}
 			}
 		],
-		"parameters": {
-			"DataAdded": {
-				"type": "string",
-				"defaultValue": "@triggerBody().folderName"
-			}
-		},
 		"annotations": []
 	}
 }
