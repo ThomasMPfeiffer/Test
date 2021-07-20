@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Notebook4",
+				"name": "Read_and_save_Data",
 				"type": "SynapseNotebook",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebook": {
-						"referenceName": "Notebook 4",
+						"referenceName": "Read_and_save_Data",
 						"type": "NotebookReference"
 					},
 					"snapshot": true

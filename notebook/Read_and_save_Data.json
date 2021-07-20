@@ -1,5 +1,5 @@
 {
-	"name": "Notebook 3_Copy1",
+	"name": "Read_and_save_Data",
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -64,7 +64,7 @@
 					]
 				},
 				"source": [
-					""
+					"DatafromParam = @triggerBody().folderName"
 				],
 				"execution_count": null
 			},
@@ -81,7 +81,7 @@
 					"\r\n",
 					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.CSV', format='csv', \r\n",
 					"header=True, delimiter = \";\")\r\n",
-					"dfparam = spark.read.load()\r\n",
+					"dfwithDataAdded = sqlContext.createDataFrame(DataAdded,lit(0))\r\n",
 					"display(df)"
 				],
 				"execution_count": 9
@@ -120,7 +120,7 @@
 					"collapsed": true
 				},
 				"source": [
-					"df.createOrReplaceTempView(\"ultradurdftemptable\")"
+					"dfwithDataAdded.createOrReplaceTempView(\"ultradurdftemptable\")"
 				],
 				"execution_count": null
 			},
