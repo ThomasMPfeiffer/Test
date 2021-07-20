@@ -122,7 +122,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"notebook": {
-								"referenceName": "Notebook 4",
+								"referenceName": "Read_and_save_Data",
 								"type": "NotebookReference"
 							},
 							"parameters": {
@@ -147,7 +147,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/notebooks/Notebook 4')]"
+				"[concat(variables('workspaceId'), '/notebooks/Read_and_save_Data')]"
 			]
 		},
 		{
@@ -1095,10 +1095,8 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
+						"memory": 56
+					}
 				},
 				"cells": [
 					{
