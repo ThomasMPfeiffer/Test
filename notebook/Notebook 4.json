@@ -54,7 +54,7 @@
 					]
 				},
 				"source": [
-					"DataAdded = \"Empty Parameter\""
+					"DataAdded = @triggerBody().folderName"
 				],
 				"execution_count": null
 			},
