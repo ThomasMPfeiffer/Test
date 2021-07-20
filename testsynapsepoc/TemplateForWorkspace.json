@@ -125,14 +125,23 @@
 								"referenceName": "Read_and_save_Data",
 								"type": "NotebookReference"
 							},
+							"parameters": {
+								"DataAdded": {
+									"value": {
+										"value": "@pipeline().parameters.Folderpath",
+										"type": "Expression"
+									},
+									"type": "string"
+								}
+							},
 							"snapshot": true
 						}
 					}
 				],
 				"parameters": {
-					"DataAdded": {
+					"Folderpath": {
 						"type": "string",
-						"defaultValue": "@triggerBody().folderName"
+						"defaultValue": "@triggerBody().folderPath"
 					}
 				},
 				"annotations": []
@@ -1086,8 +1095,10 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56
-					}
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
@@ -1108,7 +1119,7 @@
 							]
 						},
 						"source": [
-							"DatafromParam = @triggerBody().folderName"
+							"DatafromParam = DataAdded"
 						],
 						"outputs": [],
 						"execution_count": null
