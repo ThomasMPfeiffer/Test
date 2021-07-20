@@ -21,7 +21,10 @@
 					},
 					"parameters": {
 						"DataAdded": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.Folderpath",
+								"type": "Expression"
+							},
 							"type": "string"
 						}
 					},
@@ -29,6 +32,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"Folderpath": {
+				"type": "string",
+				"defaultValue": "@triggerBody().folderPath"
+			}
+		},
 		"annotations": []
 	}
 }

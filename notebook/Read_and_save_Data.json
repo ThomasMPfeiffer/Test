@@ -64,7 +64,7 @@
 					]
 				},
 				"source": [
-					"DatafromParam = @triggerBody().folderName"
+					"DatafromParam = DataAdded"
 				],
 				"execution_count": null
 			},
