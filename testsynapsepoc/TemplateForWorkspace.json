@@ -29,7 +29,7 @@
 		},
 		"TriggerDatalakeChange_properties_Pipeline 2_parameters_DataAdded": {
 			"type": "string",
-			"defaultValue": "@pipeline().Pipeline"
+			"defaultValue": "@triggerBody().folderPath"
 		},
 		"TriggerDatalakeChange_properties_typeProperties_scope": {
 			"type": "string",
@@ -128,6 +128,15 @@
 							"notebook": {
 								"referenceName": "Read_and_save_Data",
 								"type": "NotebookReference"
+							},
+							"parameters": {
+								"DataAdded": {
+									"value": {
+										"value": "@pipeline().parameters.DataAdded",
+										"type": "Expression"
+									},
+									"type": "string"
+								}
 							},
 							"snapshot": true
 						}
