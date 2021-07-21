@@ -64,7 +64,8 @@
 					]
 				},
 				"source": [
-					"DataAdded = \"Keine Daten vorhanden\""
+					"FilePath = \"Keine Daten vorhanden\"\r\n",
+					"FileName = \"Keine Daten vorhanden\""
 				],
 				"execution_count": null
 			},
@@ -79,7 +80,7 @@
 				"source": [
 					"%%pyspark\r\n",
 					"\r\n",
-					"df = spark.read.load(DataAdded, format='csv', \r\n",
+					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FilePath + '/' + FileName, format='csv', \r\n",
 					"header=True, delimiter = \";\")\r\n",
 					"display(df)"
 				],
@@ -144,7 +145,7 @@
 					"%%spark\r\n",
 					"val scala_df = spark.sqlContext.sql (\"select * from ultradurdftemptable\")\r\n",
 					"\r\n",
-					"scala_df.write.synapsesql(\"SQLPoolTest.dbo.UltradurTable\", Constants.INTERNAL)"
+					"scala_df.write.synapsesql(\"SQLPoolTest.dbo.ParameterGenerierteTable\", Constants.INTERNAL)"
 				],
 				"execution_count": 7
 			}
