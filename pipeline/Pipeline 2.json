@@ -29,7 +29,7 @@
 						},
 						"FileName": {
 							"value": {
-								"value": "@pipeline().parameters.Filename",
+								"value": "@pipeline().parameters.FileName",
 								"type": "Expression"
 							},
 							"type": "string"
