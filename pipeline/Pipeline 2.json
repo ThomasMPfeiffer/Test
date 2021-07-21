@@ -33,9 +33,13 @@
 			}
 		],
 		"parameters": {
-			"DataAdded": {
+			"FilePath": {
 				"type": "string",
-				"defaultValue": "DefaultValue"
+				"defaultValue": "DefaultFilePath"
+			},
+			"Filename": {
+				"type": "string",
+				"defaultValue": "DefaultFilename"
 			}
 		},
 		"annotations": []
