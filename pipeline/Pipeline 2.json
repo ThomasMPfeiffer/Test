@@ -20,9 +20,16 @@
 						"type": "NotebookReference"
 					},
 					"parameters": {
-						"DataAdded": {
+						"FilePath": {
 							"value": {
-								"value": "@pipeline().parameters.DataAdded",
+								"value": "@pipeline().parameters.FilePath",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"FileName": {
+							"value": {
+								"value": "@pipeline().parameters.Filename",
 								"type": "Expression"
 							},
 							"type": "string"
