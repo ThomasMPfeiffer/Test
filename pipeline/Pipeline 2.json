@@ -19,23 +19,14 @@
 						"referenceName": "Read_and_save_Data",
 						"type": "NotebookReference"
 					},
-					"parameters": {
-						"DataAdded": {
-							"value": {
-								"value": "@pipeline().parameters.Folderpath",
-								"type": "Expression"
-							},
-							"type": "string"
-						}
-					},
 					"snapshot": true
 				}
 			}
 		],
 		"parameters": {
-			"Folderpath": {
+			"DataAdded": {
 				"type": "string",
-				"defaultValue": "TestStandardwert"
+				"defaultValue": "DefaultValue"
 			}
 		},
 		"annotations": []
