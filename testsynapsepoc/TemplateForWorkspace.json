@@ -141,7 +141,7 @@
 				"parameters": {
 					"Folderpath": {
 						"type": "string",
-						"defaultValue": "@triggerBody().folderPath"
+						"defaultValue": "@triggerBody().fileName"
 					}
 				},
 				"annotations": []
