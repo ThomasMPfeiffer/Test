@@ -120,7 +120,7 @@
 					"collapsed": true
 				},
 				"source": [
-					"dfwithDataAdded.createOrReplaceTempView(\"ultradurdftemptable\")"
+					"df.createOrReplaceTempView(\"ultradurdftemptable\")"
 				],
 				"execution_count": null
 			},
