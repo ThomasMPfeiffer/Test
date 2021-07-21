@@ -23,7 +23,7 @@
 		"TriggerDatalakeChange_properties_Pipeline 2_parameters_FilePath": {
 			"value": "@triggerBody().folderPath"
 		},
-		"TriggerDatalakeChange_properties_Pipeline 2_parameters_Filename": {
+		"TriggerDatalakeChange_properties_Pipeline 2_parameters_FileName": {
 			"value": "@triggerBody().fileName"
 		},
 		"TriggerDatalakeChange_properties_typeProperties_scope": {
