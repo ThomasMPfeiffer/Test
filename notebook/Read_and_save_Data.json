@@ -79,9 +79,8 @@
 				"source": [
 					"%%pyspark\r\n",
 					"\r\n",
-					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.CSV', format='csv', \r\n",
+					"df = spark.read.load(DataAdded, format='csv', \r\n",
 					"header=True, delimiter = \";\")\r\n",
-					"dfwithDataAdded = sqlContext.createDataFrame(DataAdded,lit(0))\r\n",
 					"display(df)"
 				],
 				"execution_count": 9
