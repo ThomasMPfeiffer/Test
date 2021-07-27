@@ -67,7 +67,7 @@
 					"FilePath = \"Keine Daten vorhanden\"\r\n",
 					"FileName = \"Keine Daten vorhanden\""
 				],
-				"execution_count": 1
+				"execution_count": 11
 			},
 			{
 				"cell_type": "code",
@@ -79,12 +79,18 @@
 				},
 				"source": [
 					"%%pyspark\r\n",
-					"\r\n",
-					"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FileName, format='csv', \r\n",
-					"header=True, delimiter = \";\")\r\n",
+					"FilePath.replace(\"/synapsecontainter1\",\"/\")\r\n",
+					"if FileName != \"Keine Daten vorhanden\":\r\n",
+					"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net'+ FilePath + FileName, format='csv', \r\n",
+					"    header=True, delimiter = \";\")\r\n",
+					"else:\r\n",
+					"    rdd = spark.sparkContext.parallize(FileName)\r\n",
+					"    dfFromRdd1 = rdd.toDF()\r\n",
+					"    dfFromRdd1.printSchema()\r\n",
+					"    df = spark.createDataFrame(\"Testdata\")\r\n",
 					"display(df)"
 				],
-				"execution_count": 9
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -103,7 +109,7 @@
 				"source": [
 					"df.show()"
 				],
-				"execution_count": 6
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -120,7 +126,9 @@
 					"collapsed": true
 				},
 				"source": [
-					"df.createOrReplaceTempView(\"ultradurdftemptable\")"
+					"df.createOrReplaceTempView(\"dfTmpView\")\r\n",
+					"dfFileName = spark.createDataFrame(FileName)\r\n",
+					"df.createOrReplaceTempView(\"FileNameTmpView\")"
 				],
 				"execution_count": null
 			},
@@ -143,11 +151,12 @@
 				},
 				"source": [
 					"%%spark\r\n",
-					"val scala_df = spark.sqlContext.sql (\"select * from ultradurdftemptable\")\r\n",
+					"val scala_df = spark.sqlContext.sql (\"select * from dfTmpView\")\r\n",
+					"val scala_FilePath = spark.sqlContext.sql(\"select * from FileName\")\r\n",
 					"\r\n",
 					"scala_df.write.synapsesql(\"SQLPoolTest.dbo.ParameterGenerierteTable\", Constants.INTERNAL)"
 				],
-				"execution_count": 7
+				"execution_count": null
 			}
 		]
 	}
