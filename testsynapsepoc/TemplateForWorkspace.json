@@ -1228,7 +1228,7 @@
 							"    StructField('FilePath', StringType(), True),\r\n",
 							"    StructField('FileName', StringType(), True)\r\n",
 							"    ])\r\n",
-							"    df = spark.createDataFrame(rdd,schema1)"
+							"df = spark.createDataFrame(rdd,schema1)"
 						],
 						"outputs": [],
 						"execution_count": 1
