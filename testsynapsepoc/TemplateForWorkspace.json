@@ -909,8 +909,10 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56
-					}
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
@@ -1046,8 +1048,10 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56
-					}
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
@@ -1159,7 +1163,27 @@
 							"FileName = \"Keine Daten vorhanden\""
 						],
 						"outputs": [],
-						"execution_count": 11
+						"execution_count": 29
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": true
+						},
+						"source": [
+							"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.CSV', format='csv', header=True, delimiter = \";\")"
+						],
+						"outputs": [],
+						"execution_count": 35
 					},
 					{
 						"cell_type": "code",
@@ -1186,7 +1210,7 @@
 							"display(df)"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 30
 					},
 					{
 						"cell_type": "code",
@@ -1206,7 +1230,7 @@
 							"df.show()"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 36
 					},
 					{
 						"cell_type": "code",
@@ -1223,15 +1247,19 @@
 							"collapsed": true
 						},
 						"source": [
-							"rdd = sc.parallelize([FilePath,FileName])\r\n",
-							"schema1 = StructType([\r\n",
-							"    StructField('FilePath', StringType(), True),\r\n",
-							"    StructField('FileName', StringType(), True)\r\n",
-							"    ])\r\n",
-							"df = spark.createDataFrame(rdd,schema1)"
+							"dept = [(\"FilePath\",FilePath), \r\n",
+							"        (\"FileName\",FileName)\r\n",
+							"      ]\r\n",
+							"\r\n",
+							"deptColumns = [\"dept_name\",\"dept_id\"]\r\n",
+							"dfTransfer = spark.createDataFrame(data=dept, schema = deptColumns)\r\n",
+							"dfTransfer.printSchema()\r\n",
+							"dfTransfer.show(truncate=False)\r\n",
+							"df.printSchema()\r\n",
+							"df.show()"
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 32
 					},
 					{
 						"cell_type": "code",
@@ -1252,7 +1280,7 @@
 							"dfTransfer.createOrReplaceTempView(\"dfTransferView\")"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 37
 					},
 					{
 						"cell_type": "code",
@@ -1274,12 +1302,15 @@
 						"source": [
 							"%%spark\r\n",
 							"val scala_df = spark.sqlContext.sql (\"select * from dfTmpView\")\r\n",
-							"val scala_FileName = spark.sqlContext.sql(\"select FileName from dfTransferView\")\r\n",
+							"//val scala_FileName = spark.sqlContext.sql(\"select dept_id from dfTransferView where dept_name = 'FileName' \")\r\n",
+							"val scala_Filenametable = spark.sqlContext.sql(\"select * from dfTransferView\")\r\n",
 							"\r\n",
-							"scala_df.write.synapsesql(\"SQLPoolTest.dbo.\"+scala_FileName, Constants.INTERNAL)"
+							"//scala_Filenametable.write.synapsesql(\"scala_Filenametable\", Constants.INTERNAL)\r\n",
+							"//scala_df.write.synapsesql(\"SQLPoolTest.dbo.\"+scala_FileName, Constants.INTERNAL)\r\n",
+							"scala_df.write.synapsesql(\"scala_df\", Constants.INTERNAL)"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 38
 					}
 				]
 			},
