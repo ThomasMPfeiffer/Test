@@ -1151,8 +1151,10 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56
-					}
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
@@ -1177,7 +1179,7 @@
 							"FileName = \"Keine Daten vorhanden\""
 						],
 						"outputs": [],
-						"execution_count": 9
+						"execution_count": 34
 					},
 					{
 						"cell_type": "code",
@@ -1197,7 +1199,7 @@
 							"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.CSV', format='csv', header=True, delimiter = \";\")"
 						],
 						"outputs": [],
-						"execution_count": 10
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -1224,7 +1226,7 @@
 							"display(df)"
 						],
 						"outputs": [],
-						"execution_count": 11
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -1244,7 +1246,7 @@
 							"df.show()"
 						],
 						"outputs": [],
-						"execution_count": 12
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -1273,7 +1275,7 @@
 							"df.show()"
 						],
 						"outputs": [],
-						"execution_count": 13
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -1294,7 +1296,7 @@
 							"dfTransfer.createOrReplaceTempView(\"dfTransferView\")"
 						],
 						"outputs": [],
-						"execution_count": 14
+						"execution_count": 20
 					},
 					{
 						"cell_type": "code",
@@ -1316,10 +1318,17 @@
 						"source": [
 							"%%spark\r\n",
 							"val scala_df = spark.sqlContext.sql (\"select * from dfTmpView\")\r\n",
-							"val scala_FileName = spark.sqlContext.sql(\"select dept_id from dfTransferView where dept_name = 'FileName' \")\r\n",
-							"val scala_Filenametable = spark.sqlContext.sql(\"select * from dfTransferView\")\r\n",
+							"val scala_FileNamedf = spark.sqlContext.sql(\"select dept_id from dfTransferView where dept_name = 'FileName' \")\r\n",
+							"val scala_Filename = scala_FileNamedf.select(\"dept_id\").as[String].collect()\r\n",
+							"print(scala_df)\r\n",
+							"print(\"LEEEEEL\")\r\n",
+							"print(scala_FileName)\r\n",
+							"print(\"LEEEEEEEEEEL\")\r\n",
+							"scala_FileNamedf.show()\r\n",
 							"\r\n",
-							"scala_Filenametable.write.synapsesql(\"SQLPoolTest.dbo.scala_Filenametable\", Constants.INTERNAL)\r\n",
+							"//val scala_Filenametable = spark.sqlContext.sql(\"select * from dfTransferView\")\r\n",
+							"//scala_Filenametable.write.synapsesql(\"SQLPoolTest.dbo.scala_Filenametable\", Constants.INTERNAL)\r\n",
+							"\r\n",
 							"try{\r\n",
 							"    scala_df.write.synapsesql(\"SQLPoolTest.dbo.\"+scala_FileName, Constants.INTERNAL)\r\n",
 							"}catch{\r\n",
@@ -1329,7 +1338,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 16
+						"execution_count": 31
 					}
 				]
 			},
