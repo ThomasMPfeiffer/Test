@@ -1212,9 +1212,9 @@
 						"source": [
 							"%%pyspark\r\n",
 							"from pyspark.sql.types import StructType,StructField, StringType\r\n",
-							"FilePath.replace(\"/synapsecontainter1\",\"/\")\r\n",
+							"FilePath.replace(\"/synapsecontainter1\",\"//\")\r\n",
 							"if FileName != \"Keine Daten vorhanden\":\r\n",
-							"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FilePath + FileName, format='csv', \r\n",
+							"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net'+ FilePath + FileName, format='csv', \r\n",
 							"    header=True, delimiter = \";\")\r\n",
 							"else: \r\n",
 							"    emptyRDD = spark.sparkContext.emptyRDD()\r\n",
