@@ -1184,26 +1184,6 @@
 					{
 						"cell_type": "code",
 						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": true
-						},
-						"source": [
-							"df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1.CSV', format='csv', header=True, delimiter = \";\")"
-						],
-						"outputs": [],
-						"execution_count": 9
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
 							"microsoft": {
 								"language": "python"
 							},
@@ -1212,7 +1192,7 @@
 						"source": [
 							"%%pyspark\r\n",
 							"from pyspark.sql.types import StructType,StructField, StringType\r\n",
-							"FilePath.replace(\"/synapsecontainter1\",\"//\")\r\n",
+							"FilePath = FilePath.replace(\"/synapsecontainter1\",\"//\")\r\n",
 							"if FileName != \"Keine Daten vorhanden\":\r\n",
 							"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net'+ FilePath + FileName, format='csv', \r\n",
 							"    header=True, delimiter = \";\")\r\n",
