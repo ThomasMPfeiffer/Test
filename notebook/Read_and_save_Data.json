@@ -103,7 +103,7 @@
 					"FilePathNoParam = FilePath\r\n",
 					"FilePathNoParam = FilePathNoParam.replace(\"synapsecontainter1\",\"\")\r\n",
 					"if FileName != \"Keine Daten vorhanden\":\r\n",
-					"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FilePath + FileName, format='csv', \r\n",
+					"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FilePathNoParam + FileName, format='csv', \r\n",
 					"    header=True, delimiter = \";\")\r\n",
 					"else: \r\n",
 					"    emptyRDD = spark.sparkContext.emptyRDD()\r\n",
