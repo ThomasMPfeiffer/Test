@@ -67,7 +67,7 @@
 					"FilePath = \"Keine Daten vorhanden\"\r\n",
 					"FileName = \"Keine Daten vorhanden\""
 				],
-				"execution_count": 16
+				"execution_count": 1
 			},
 			{
 				"cell_type": "code",
@@ -87,7 +87,7 @@
 					"FilePath = FilePath.replace(\"Daten\",\"\")\r\n",
 					"print(FilePath)"
 				],
-				"execution_count": 17
+				"execution_count": 2
 			},
 			{
 				"cell_type": "code",
@@ -103,9 +103,11 @@
 					"FilePathNoParam = FilePath\r\n",
 					"FilePathNoParam = FilePathNoParam.replace(\"synapsecontainter1\",\"\")\r\n",
 					"if FileName != \"Keine Daten vorhanden\":\r\n",
-					"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FilePathNoParam + FileName, format='csv', \r\n",
-					"    header=True, delimiter = \";\")\r\n",
-					"else: \r\n",
+					"    #df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FilePathNoParam + FileName, format='csv', \r\n",
+					"   # header=True, delimiter = \";\")\r\n",
+					"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/ZV_Ultradur_B4300_G6_mild_gekerbt_0Grad_Neuzustand1_Parameter.CSV', format='csv', \r\n",
+					"        header=True, delimiter = \";\")\r\n",
+					"else:  \r\n",
 					"    emptyRDD = spark.sparkContext.emptyRDD()\r\n",
 					"    schema = StructType([\r\n",
 					"        StructField('NoData', StringType(), True)\r\n",
@@ -114,7 +116,7 @@
 					"\r\n",
 					"display(df)"
 				],
-				"execution_count": 18
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -133,7 +135,7 @@
 				"source": [
 					"df.show()"
 				],
-				"execution_count": 19
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -161,7 +163,7 @@
 					"df.printSchema()\r\n",
 					"df.show()"
 				],
-				"execution_count": 20
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -181,7 +183,7 @@
 					"df.createOrReplaceTempView(\"dfTmpView\")\r\n",
 					"dfTransfer.createOrReplaceTempView(\"dfTransferView\")"
 				],
-				"execution_count": 21
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -218,7 +220,7 @@
 					"\r\n",
 					""
 				],
-				"execution_count": 25
+				"execution_count": 7
 			}
 		]
 	}
