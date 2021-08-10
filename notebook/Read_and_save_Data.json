@@ -67,7 +67,7 @@
 					"FilePath = \"Keine Daten vorhanden\"\r\n",
 					"FileName = \"Keine Daten vorhanden\""
 				],
-				"execution_count": 1
+				"execution_count": 16
 			},
 			{
 				"cell_type": "code",
@@ -87,7 +87,7 @@
 					"FilePath = FilePath.replace(\"Daten\",\"\")\r\n",
 					"print(FilePath)"
 				],
-				"execution_count": 2
+				"execution_count": 17
 			},
 			{
 				"cell_type": "code",
@@ -114,7 +114,7 @@
 					"\r\n",
 					"display(df)"
 				],
-				"execution_count": 3
+				"execution_count": 18
 			},
 			{
 				"cell_type": "code",
@@ -133,7 +133,7 @@
 				"source": [
 					"df.show()"
 				],
-				"execution_count": 4
+				"execution_count": 19
 			},
 			{
 				"cell_type": "code",
@@ -161,7 +161,7 @@
 					"df.printSchema()\r\n",
 					"df.show()"
 				],
-				"execution_count": 5
+				"execution_count": 20
 			},
 			{
 				"cell_type": "code",
@@ -181,7 +181,7 @@
 					"df.createOrReplaceTempView(\"dfTmpView\")\r\n",
 					"dfTransfer.createOrReplaceTempView(\"dfTransferView\")"
 				],
-				"execution_count": 6
+				"execution_count": 21
 			},
 			{
 				"cell_type": "code",
@@ -208,17 +208,17 @@
 					"val scala_FileNamedf = spark.sqlContext.sql(\"select dept_id from dfTransferView where dept_name = 'FileName' \")\r\n",
 					"//save Filename as string\r\n",
 					"val scala_FileName = scala_FileNamedf.select(\"dept_id\").first()\r\n",
-					"\r\n",
+					"//val scala_FileName = \"TestFugg\"\r\n",
 					"try{\r\n",
 					"    //try to create a new Table with the given Filename\r\n",
 					"    scala_df.write.synapsesql(\"SQLPoolTest.dbo.\"+scala_FileName, Constants.INTERNAL)\r\n",
 					"}catch{\r\n",
-					"    case e: java.sql.SQLException => println(\"Es gibt bereits eine Tabelle mit dem angegebenen Namen. Bitte nennen Sie die hochzuladene Datei um, oder ändern Löschen Sie die Tabelle im SQL-Pool.\")\r\n",
+					"    case e: java.sql.SQLException => println(\"Es gibt bereits eine Tabelle mit dem Namen \"+scala_FileName+\". Bitte nennen Sie die hochzuladene Datei um, oder ändern Löschen Sie die Tabelle im SQL-Pool.\")\r\n",
 					"}\r\n",
 					"\r\n",
 					""
 				],
-				"execution_count": 7
+				"execution_count": 25
 			}
 		]
 	}
