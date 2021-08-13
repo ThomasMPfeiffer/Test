@@ -72,26 +72,6 @@
 			{
 				"cell_type": "code",
 				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					},
-					"collapsed": true
-				},
-				"source": [
-					"FilePath = FilePath.replace(\"Daten\",\"\")\r\n",
-					"print(FilePath)"
-				],
-				"execution_count": 2
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
 					"microsoft": {
 						"language": "python"
 					},
@@ -102,6 +82,8 @@
 					"from pyspark.sql.types import StructType,StructField, StringType\r\n",
 					"FilePathNoParam = FilePath\r\n",
 					"FilePathNoParam = FilePathNoParam.replace(\"synapsecontainter1\",\"\")\r\n",
+					"FileNameNoParam = FileName\r\n",
+					"FileNameNoParam = FileNameNoParam.replace(\".\",\"_\")\r\n",
 					"if FileName != \"Keine Daten vorhanden\":\r\n",
 					"    #df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FilePathNoParam + FileName, format='csv', \r\n",
 					"   # header=True, delimiter = \";\")\r\n",
