@@ -1246,8 +1246,8 @@
 							"collapsed": true
 						},
 						"source": [
-							"dept = [(\"FilePath\",FilePath), \r\n",
-							"        (\"FileName\",FileName)\r\n",
+							"dept = [(\"FilePath\",FilePathNoParam), \r\n",
+							"        (\"FileName\",FileNameNoParam)\r\n",
 							"      ]\r\n",
 							"\r\n",
 							"deptColumns = [\"dept_name\",\"dept_id\"]\r\n",
