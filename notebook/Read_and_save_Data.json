@@ -67,7 +67,7 @@
 					"FilePath = \"Keine Daten vorhanden\"\r\n",
 					"FileName = \"Keine Daten vorhanden\""
 				],
-				"execution_count": 1
+				"execution_count": 38
 			},
 			{
 				"cell_type": "code",
@@ -96,7 +96,7 @@
 					"\r\n",
 					"display(df)"
 				],
-				"execution_count": 3
+				"execution_count": 39
 			},
 			{
 				"cell_type": "code",
@@ -115,7 +115,7 @@
 				"source": [
 					"df.show()"
 				],
-				"execution_count": 4
+				"execution_count": 40
 			},
 			{
 				"cell_type": "code",
@@ -143,7 +143,7 @@
 					"df.printSchema()\r\n",
 					"df.show()"
 				],
-				"execution_count": 5
+				"execution_count": 41
 			},
 			{
 				"cell_type": "code",
@@ -163,7 +163,7 @@
 					"df.createOrReplaceTempView(\"dfTmpView\")\r\n",
 					"dfTransfer.createOrReplaceTempView(\"dfTransferView\")"
 				],
-				"execution_count": 6
+				"execution_count": 42
 			},
 			{
 				"cell_type": "code",
@@ -189,18 +189,24 @@
 					"//read in Filename as df\r\n",
 					"val scala_FileNamedf = spark.sqlContext.sql(\"select dept_id from dfTransferView where dept_name = 'FileName' \")\r\n",
 					"//save Filename as string\r\n",
-					"val scala_FileName = scala_FileNamedf.select(\"dept_id\").first()\r\n",
-					"//val scala_FileName = \"TestFugg\"\r\n",
-					"try{\r\n",
-					"    //try to create a new Table with the given Filename\r\n",
-					"    scala_df.write.synapsesql(\"SQLPoolTest.dbo.\"+scala_FileName, Constants.INTERNAL)\r\n",
-					"}catch{\r\n",
-					"    case e: java.sql.SQLException => println(\"Es gibt bereits eine Tabelle mit dem Namen \"+scala_FileName+\". Bitte nennen Sie die hochzuladene Datei um, oder ändern Löschen Sie die Tabelle im SQL-Pool.\")\r\n",
-					"}\r\n",
+					"var scala_FileName = scala_FileNamedf.select(\"dept_id\").first()\r\n",
+					"scala_FileName = scala_FileName.toString\r\n",
+					"var FileCheck = 0\r\n",
+					"var n = 1\r\n",
+					"do{\r\n",
+					"    try{\r\n",
+					"        scala_df.write.synapsesql(\"test_sysnaps_Np.dbo.\"+scala_FileName,Constants.INTERNAL)\r\n",
+					"        FileCheck = 1 \r\n",
+					"    }catch{\r\n",
+					"        case e: java.sql.SQLException => scala_FileName = scala_FileName + \"_V\" + n.toString\r\n",
+					"        n = n+1\r\n",
+					"    }\r\n",
+					"}while(FileCheck==1);\r\n",
+					"\r\n",
 					"\r\n",
 					""
 				],
-				"execution_count": 7
+				"execution_count": 44
 			}
 		]
 	}
