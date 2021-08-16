@@ -1179,7 +1179,7 @@
 							"FileName = \"Keine Daten vorhanden\""
 						],
 						"outputs": [],
-						"execution_count": 38
+						"execution_count": 51
 					},
 					{
 						"cell_type": "code",
@@ -1196,6 +1196,7 @@
 							"FilePathNoParam = FilePathNoParam.replace(\"synapsecontainter1\",\"\")\r\n",
 							"FileNameNoParam = FileName\r\n",
 							"FileNameNoParam = FileNameNoParam.replace(\".\",\"_\")\r\n",
+							"FileNameNoParam = FileNameNoParam + \"00\"\r\n",
 							"if FileName != \"Keine Daten vorhanden\":\r\n",
 							"    df = spark.read.load('abfss://synapsecontainter1@datalalakesynapse1.dfs.core.windows.net/'+ FilePathNoParam + FileName, format='csv', \r\n",
 							"    header=True, delimiter = \";\")\r\n",
@@ -1209,7 +1210,7 @@
 							"display(df)"
 						],
 						"outputs": [],
-						"execution_count": 39
+						"execution_count": 52
 					},
 					{
 						"cell_type": "code",
@@ -1229,7 +1230,7 @@
 							"df.show()"
 						],
 						"outputs": [],
-						"execution_count": 40
+						"execution_count": 53
 					},
 					{
 						"cell_type": "code",
@@ -1258,7 +1259,7 @@
 							"df.show()"
 						],
 						"outputs": [],
-						"execution_count": 41
+						"execution_count": 54
 					},
 					{
 						"cell_type": "code",
@@ -1279,7 +1280,7 @@
 							"dfTransfer.createOrReplaceTempView(\"dfTransferView\")"
 						],
 						"outputs": [],
-						"execution_count": 42
+						"execution_count": 55
 					},
 					{
 						"cell_type": "code",
@@ -1301,29 +1302,30 @@
 						"source": [
 							"%%spark\r\n",
 							"//read in Data to save in Table from TmpView as df\r\n",
+							"// scala_df.write.synapsesql(\"test_sysnaps_Np.dbo.\"+scala_FileName,Constants.INTERNAL)\r\n",
 							"val scala_df = spark.sqlContext.sql (\"select * from dfTmpView\")\r\n",
-							"//read in Filename as df\r\n",
-							"val scala_FileNamedf = spark.sqlContext.sql(\"select dept_id from dfTransferView where dept_name = 'FileName' \")\r\n",
-							"//save Filename as string\r\n",
-							"var scala_FileName = scala_FileNamedf.select(\"dept_id\").first()\r\n",
-							"scala_FileName = scala_FileName.toString\r\n",
+							"val scale_TmpView = spark.sqlContext.sql(\"select dept_id from dfTransferView where dept_name = 'FileName'\")\r\n",
+							"val scala_FileName = scale_TmpView.select(\"dept_id\").first().toString\r\n",
+							"//scala_df.write.synapsesql(\"test_sysnaps_Np.dbo.\"+scala_FileName,Constants.INTERNAL)\r\n",
+							"\r\n",
+							"var NewFileName = scala_FileName\r\n",
 							"var FileCheck = 0\r\n",
-							"var n = 1\r\n",
+							"var n = 0\r\n",
 							"do{\r\n",
 							"    try{\r\n",
-							"        scala_df.write.synapsesql(\"test_sysnaps_Np.dbo.\"+scala_FileName,Constants.INTERNAL)\r\n",
-							"        FileCheck = 1 \r\n",
+							"        scala_df.write.synapsesql(\"SQLPoolTest.dbo.\"+NewFileName,Constants.INTERNAL)\r\n",
+							"        FileCheck = FileCheck + 2\r\n",
 							"    }catch{\r\n",
-							"        case e: java.sql.SQLException => scala_FileName = scala_FileName + \"_V\" + n.toString\r\n",
-							"        n = n+1\r\n",
+							"        case e: java.sql.SQLException => NewFileName = scala_FileName.replace(\"00\",\"0\"+n.toString);\r\n",
+							"        println(\"Name: \" +NewFileName);\r\n",
+							"        n = n+1;\r\n",
 							"    }\r\n",
-							"}while(FileCheck==1);\r\n",
-							"\r\n",
+							"}while(FileCheck <= 1);\r\n",
 							"\r\n",
 							""
 						],
 						"outputs": [],
-						"execution_count": 44
+						"execution_count": 60
 					}
 				]
 			},
